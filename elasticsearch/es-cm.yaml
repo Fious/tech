@@ -1,0 +1,36 @@
+﻿apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch-config
+  namespace: tech-assignment
+data:
+  elasticsearch.yml: |
+    cluster:
+      initial_master_nodes:
+        - es-data-0
+      name: ${CLUSTER_NAME}
+      info:
+        update:
+          interval: 5m
+
+    node:
+      name: ${NODE_NAME}
+      roles: ["master", "data", "ingest", "ml", "remote_cluster_client", "transform"]
+
+    network.host: 0
+
+    path:
+      data: /data/data
+      logs: /data/log
+
+    bootstrap:
+      memory_lock: false
+
+    http:
+      compression: false
+      cors:
+        enabled: ${HTTP_CORS_ENABLE}
+        allow-origin: ${HTTP_CORS_ALLOW_ORIGIN}
+
+    discovery:
+      seed_hosts: ${DISCOVERY_SERVICE}

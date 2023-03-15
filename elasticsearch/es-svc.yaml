@@ -1,0 +1,15 @@
+﻿apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch
+  namespace: tech-assignment
+spec:
+  selector:
+    app: elasticsearch
+  ports:
+    - name: http
+      port: 9200
+      targetPort: rest
+    - name: transport
+      port: 9300
+      targetPort: discovery

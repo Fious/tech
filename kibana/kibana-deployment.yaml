@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+  namespace: tech-assignment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - kibana
+                topologyKey: kubernetes.io/hostname
+      containers:
+        - name: kibana
+          image: docker.elastic.co/kibana/kibana:8.6.2
+          resources:
+            requests:
+              memory: 2Gi
+              cpu: 700m
+            limits:
+              memory: 2Gi
+              cpu: 1
+          ports:
+            - name: http
+              containerPort: 5601
+          volumeMounts:
+            - name: config
+              mountPath: /etc/kibana/config
+              readOnly: false
+      volumes:
+        - name: config
+          configMap:
+            name: kibana

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kibana
+  namespace: tech-assignment
+data:
+  kibana.yml: |
+    server:
+      host: '0.0.0.0'
+
+    elasticsearch:
+      hosts:
+        - "http://elasticsearch:9200"
+
+    csp:
+      strict: true
+
+    # WARNING: Toggling feature enabled flags will likely force kibana to re-optimize on startup, causing a very long
+    # startup time. Should that be required, the change should be made in a new docker image as well as in this config
+    # file.
+    console.ui.enabled: true
